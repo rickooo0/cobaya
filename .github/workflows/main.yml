@@ -1,0 +1,60 @@
+name: Jalankan Puppeteer
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    name: Install Dependencies dan Jalankan Tes
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rangeIndex: ["0 , 5", "5 , 10"]
+    steps:
+      - name: Checkout Kode
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libx11-xcb1 \
+            libxkbcommon0 \
+            libnss3 \
+            libatk-bridge2.0-0 \
+            libgtk-3-0 \
+            libgbm1 \
+            libasound2 \
+            libpango-1.0-0 \
+            libcups2 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxrandr2 \
+            libxshmfence1 \
+            libatspi2.0-0 \
+            libnss3 \
+            lsb-release \
+            wget \
+            ca-certificates \
+            fonts-liberation \
+            libappindicator3-1 \
+            libnspr4 \
+            libxtst6 \
+            libnss3 \
+            libgbm-dev \
+            libxkbcommon-dev
+          npm install
+          npm install puppeteer
+
+      - name: Jalankan Tes Puppeteer
+        run: |
+          node puppeteer-test.js
+
+      - name: Selesai
+        run: echo "Tes Puppeteer selesai"
